@@ -7,9 +7,6 @@ const config = {
 
   physics: {
     default: "arcade",
-    arcade: {
-      gravity: { y: 400 },
-    },
   },
 
   scene: {
@@ -19,16 +16,22 @@ const config = {
   },
 };
 
-function preload() {
-  this.load.image("sky", "assets/sky.png");
-  this.load.image("bird", "assets/bird.png");
-}
-
 const VELOCITY = 200;
 
 let flapVelocity = 250;
 let bird = null;
 const initialBirdPosition = { x: config.width * 0.1, y: config.height / 2 };
+const initialPipePosition = { x: 200, y: config.height / 2 };
+const initialPipePosition2 = { x: 200, y: -config.height * 0.5 };
+const initialPipePosition3 = { x: 400, y: config.height * 0.3 };
+const initialPipePosition4 = { x: 400, y: -config.height * 0.6 };
+let pipe = null;
+
+function preload() {
+  this.load.image("sky", "assets/sky.png");
+  this.load.image("bird", "assets/bird.png");
+  this.load.image("pipe", "assets/pipe.png");
+}
 
 function create() {
   this.add.image(0, 0, "sky").setOrigin(0, 0);
@@ -36,9 +39,24 @@ function create() {
   bird = this.physics.add
     .sprite(initialBirdPosition.x, initialBirdPosition.y, "bird")
     .setOrigin(0);
+  bird.body.gravity.y = 400;
 
   this.input.on("pointerdown", flap);
   this.input.keyboard.on("keydown_SPACE", flap);
+
+  pipe = this.physics.add
+    .sprite(initialPipePosition.x, initialPipePosition.y, "pipe")
+    .setOrigin(0);
+
+  pipe = this.physics.add
+    .sprite(initialPipePosition2.x, initialPipePosition2.y, "pipe")
+    .setOrigin(0);
+  pipe = this.physics.add
+    .sprite(initialPipePosition3.x, initialPipePosition3.y, "pipe")
+    .setOrigin(0);
+  pipe = this.physics.add
+    .sprite(initialPipePosition4.x, initialPipePosition4.y, "pipe")
+    .setOrigin(0);
 }
 
 //if bird position y is smaller than 0 or greater that height of the canvas then alert "you have lost"
