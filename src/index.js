@@ -17,7 +17,7 @@ const config = {
 };
 
 const VELOCITY = 200;
-const PIPES_TO_RENDER = 500;
+const PIPES_TO_RENDER = 100;
 let flapVelocity = 250;
 
 let bird = null;
@@ -26,6 +26,7 @@ const initialBirdPosition = { x: config.width * 0.1, y: config.height / 2 };
 
 let pipeHorizontalDistance = 0;
 const pipeVerticalDistanceRange = [100, 200];
+const pipeHorizontalDistanceRange = [330, 450];
 
 function preload() {
   this.load.image("sky", "assets/sky.png");
@@ -64,22 +65,33 @@ function update(time, delta) {
 
 //uPipe, and lpipes are the stripes so we dont need them here
 function placePipe(uPipe, lPipe) {
-  pipeHorizontalDistance += 400;
-  // pipeHorizontalDistance =  getRightMostPipe()
+  const rightMostX = getRightMostPipe();
+
   let pipeVerticalDistance = Phaser.Math.Between(...pipeVerticalDistanceRange);
   let pipeVerticalPosition = Phaser.Math.Between(
     0 + 20,
     config.height - 20 - pipeVerticalDistance
   );
 
-  uPipe.x = pipeHorizontalDistance;
+  let pipeHorizontalDistance = Phaser.Math.Between(
+    ...pipeHorizontalDistanceRange
+  );
+  uPipe.x = rightMostX + pipeHorizontalDistance;
   uPipe.y = pipeVerticalPosition;
 
   lPipe.x = uPipe.x;
   lPipe.y = uPipe.y + pipeVerticalDistance;
 }
 
-// function getRightMostPipe() {}
+function getRightMostPipe() {
+  let rightMostX = 0;
+
+  pipes.getChildren().forEach(function (pipe) {
+    rightMostX = Math.max(pipe.x, rightMostX);
+  });
+
+  return rightMostX;
+}
 
 function restartBirdPosition() {
   bird.x = initialBirdPosition.x;
