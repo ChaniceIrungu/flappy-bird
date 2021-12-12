@@ -38,7 +38,7 @@ function create() {
 //if bird position x is same or larger than width of canvas go back to the left
 //if bird position x is same or smaller or equal to 0 then move back to the right
 function update(time, delta) {
-  if (bird.x >= config.width) {
+  if (bird.x >= config.width - bird.width) {
     bird.body.velocity.x = -VELOCITY;
   } else if (bird.x <= 0) {
     bird.body.velocity.x = VELOCITY;
