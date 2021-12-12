@@ -8,7 +8,7 @@ const config = {
   physics: {
     default: "arcade",
     arcade: {
-      gravity: { y: 200 },
+      gravity: { y: 400 },
     },
   },
 
@@ -25,6 +25,8 @@ function preload() {
 }
 
 const VELOCITY = 200;
+
+let flapVelocity = 250;
 let bird = null;
 let totaDelta = null;
 
@@ -35,16 +37,17 @@ function create() {
     .sprite(config.width / 10, config.height / 2, "bird")
     .setOrigin(0);
 
-  this.input.on("pointerdown", function () {
-    console.log("pressing mouse button!");
-  });
-  this.input.keyboard.on("keydown_SPACE", function () {
-    console.log("pressing space button!");
-  });
+  this.input.on("pointerdown", flap);
+  this.input.keyboard.on("keydown_SPACE", flap);
 }
 
 //if bird position x is same or larger than width of canvas go back to the left
 //if bird position x is same or smaller or equal to 0 then move back to the right
 function update(time, delta) {}
+
+function flap() {
+  debugger;
+  bird.body.velocity.y = -flapVelocity;
+}
 
 new Phaser.Game(config);
