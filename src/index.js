@@ -1,16 +1,14 @@
 import Phaser from "phaser";
 
 const config = {
-  //WebGL(Web graphics library) Js Api for rendering 2D and 3D graphics
   type: Phaser.AUTO,
   width: 800,
   height: 600,
-  //interaction of your objects/ how gravity/velocity of object is computed
+
   physics: {
-    //Arcade physics plugin, manages physics simulations
     default: "arcade",
   },
-  //what you display
+
   scene: {
     preload: preload,
     create: create,
@@ -18,28 +16,33 @@ const config = {
   },
 };
 
-//loading assets such as images, music, animations ...
 function preload() {
-  //this context is scene containing functions and properties you can use
   this.load.image("sky", "assets/sky.png");
   this.load.image("bird", "assets/bird.png");
 }
 
+const VELOCITY = 200;
 let bird = null;
-// initializing instances of the object on screen/ memory
+
 function create() {
-  //x-400, y-300, key of image
   this.add.image(0, 0, "sky").setOrigin(0, 0);
-  //game object that has more properties you can play with
+
   bird = this.physics.add
     .sprite(config.width / 10, config.height / 2, "bird")
     .setOrigin(0);
-  //gravity increases per second while velocity remains constant
-  bird.body.gravity.y = 200;
-  debugger;
+  bird.body.velocity.x = VELOCITY;
+
+  // bird.body.gravity.y = 200;
 }
 
-//60 frames per second fps/ 60 times per second
-function update(time, delta) {}
+//if bird position x is same or larger than width of canvas go back to the left
+//if bird position x is same or smaller or equal to 0 then move back to the right
+function update(time, delta) {
+  if (bird.x >= config.width) {
+    bird.body.velocity.x = -VELOCITY;
+  } else if (bird.x <= 0) {
+    bird.body.velocity.x = VELOCITY;
+  }
+}
 
 new Phaser.Game(config);
