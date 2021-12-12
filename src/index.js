@@ -20,12 +20,20 @@ const VELOCITY = 200;
 
 let flapVelocity = 250;
 let bird = null;
-const initialBirdPosition = { x: config.width * 0.1, y: config.height / 2 };
-const initialPipePosition = { x: 200, y: config.height / 2 };
-const initialPipePosition2 = { x: 200, y: -config.height * 0.5 };
+
+let upperPipe = null;
+let lowerPipe = null;
+const pipeVerticalDistanceRange = [150, 250];
+let pipeVerticalDistance = Phaser.Math.Between(
+  pipeVerticalDistanceRange[0],
+  pipeVerticalDistanceRange[1]
+);
+
 const initialPipePosition3 = { x: 400, y: config.height * 0.3 };
 const initialPipePosition4 = { x: 400, y: -config.height * 0.6 };
 let pipe = null;
+
+const initialBirdPosition = { x: config.width * 0.1, y: config.height / 2 };
 
 function preload() {
   this.load.image("sky", "assets/sky.png");
@@ -44,13 +52,12 @@ function create() {
   this.input.on("pointerdown", flap);
   this.input.keyboard.on("keydown_SPACE", flap);
 
-  pipe = this.physics.add
-    .sprite(initialPipePosition.x, initialPipePosition.y, "pipe")
-    .setOrigin(0);
+  upperPipe = this.physics.add.sprite(200, 100, "pipe").setOrigin(0, 1);
 
-  pipe = this.physics.add
-    .sprite(initialPipePosition2.x, initialPipePosition2.y, "pipe")
-    .setOrigin(0);
+  lowerPipe = this.physics.add
+    .sprite(200, upperPipe.y + pipeVerticalDistance, "pipe")
+    .setOrigin(0, 0);
+
   pipe = this.physics.add
     .sprite(initialPipePosition3.x, initialPipePosition3.y, "pipe")
     .setOrigin(0);
