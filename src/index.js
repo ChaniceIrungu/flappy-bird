@@ -17,14 +17,13 @@ const config = {
 };
 
 const VELOCITY = 200;
-const PIPES_TO_RENDER = 100;
+const PIPES_TO_RENDER = 10;
 let flapVelocity = 250;
 
 let bird = null;
 let pipes = null;
 const initialBirdPosition = { x: config.width * 0.1, y: config.height / 2 };
 
-let pipeHorizontalDistance = 0;
 const pipeVerticalDistanceRange = [100, 200];
 const pipeHorizontalDistanceRange = [330, 450];
 
@@ -61,26 +60,40 @@ function update(time, delta) {
   if (bird.y < 0 - bird.height || bird.y > config.height) {
     restartBirdPosition();
   }
+
+  recyclePipes();
 }
 
-//uPipe, and lpipes are the stripes so we dont need them here
 function placePipe(uPipe, lPipe) {
   const rightMostX = getRightMostPipe();
-
   let pipeVerticalDistance = Phaser.Math.Between(...pipeVerticalDistanceRange);
   let pipeVerticalPosition = Phaser.Math.Between(
     0 + 20,
     config.height - 20 - pipeVerticalDistance
   );
-
   let pipeHorizontalDistance = Phaser.Math.Between(
     ...pipeHorizontalDistanceRange
   );
+
   uPipe.x = rightMostX + pipeHorizontalDistance;
   uPipe.y = pipeVerticalPosition;
 
   lPipe.x = uPipe.x;
   lPipe.y = uPipe.y + pipeVerticalDistance;
+}
+
+//get all the children in the pipes group
+function recyclePipes() {
+  const temPipes = [];
+  pipes.getChildren().forEach((pipe) => {
+    if (pipe.getBounds().right <= 0) {
+      temPipes.push(pipe);
+      if (temPipes.length === 2) {
+        placePipe(...temPipes);
+      }
+      // { placePipe(temPipes [0], tempPipes[1])}
+    }
+  });
 }
 
 function getRightMostPipe() {
