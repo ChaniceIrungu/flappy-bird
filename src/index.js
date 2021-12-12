@@ -30,19 +30,14 @@ function create() {
   bird = this.physics.add
     .sprite(config.width / 10, config.height / 2, "bird")
     .setOrigin(0);
-  bird.body.velocity.x = VELOCITY;
 
-  // bird.body.gravity.y = 200;
+  this.input.on("pointerdown", function () {
+    console.log("pressing mous button");
+  });
 }
 
 //if bird position x is same or larger than width of canvas go back to the left
 //if bird position x is same or smaller or equal to 0 then move back to the right
-function update(time, delta) {
-  if (bird.x >= config.width - bird.width) {
-    bird.body.velocity.x = -VELOCITY;
-  } else if (bird.x <= 0) {
-    bird.body.velocity.x = VELOCITY;
-  }
-}
+function update(time, delta) {}
 
 new Phaser.Game(config);
