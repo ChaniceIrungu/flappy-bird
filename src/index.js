@@ -26,7 +26,7 @@ function preload() {
 // initializing instances of the object on screen/ memory
 function create() {
   //x-400, y-300, key of image
-  this.add.image(config.width / 2, config.height / 2, "sky");
+  this.add.image(0, 0, "sky").setOrigin(0, 0);
 }
 
 new Phaser.Game(config);
