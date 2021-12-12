@@ -28,25 +28,33 @@ const VELOCITY = 200;
 
 let flapVelocity = 250;
 let bird = null;
-let totaDelta = null;
+const initialBirdPosition = { x: config.width * 0.1, y: config.height / 2 };
 
 function create() {
   this.add.image(0, 0, "sky").setOrigin(0, 0);
 
   bird = this.physics.add
-    .sprite(config.width / 10, config.height / 2, "bird")
+    .sprite(initialBirdPosition.x, initialBirdPosition.y, "bird")
     .setOrigin(0);
 
   this.input.on("pointerdown", flap);
   this.input.keyboard.on("keydown_SPACE", flap);
 }
 
-//if bird position x is same or larger than width of canvas go back to the left
-//if bird position x is same or smaller or equal to 0 then move back to the right
-function update(time, delta) {}
+//if bird position y is smaller than 0 or greater that height of the canvas then alert "you have lost"
+function update(time, delta) {
+  if (bird.y < 0 - bird.height || bird.y > config.height) {
+    restartBirdPosition();
+  }
+}
+
+function restartBirdPosition() {
+  bird.x = initialBirdPosition.x;
+  bird.y = initialBirdPosition.y;
+  bird.body.velocity.y = 0;
+}
 
 function flap() {
-  debugger;
   bird.body.velocity.y = -flapVelocity;
 }
 
