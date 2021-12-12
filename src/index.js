@@ -7,6 +7,9 @@ const config = {
 
   physics: {
     default: "arcade",
+    arcade: {
+      gravity: { y: 200 },
+    },
   },
 
   scene: {
@@ -23,6 +26,7 @@ function preload() {
 
 const VELOCITY = 200;
 let bird = null;
+let totaDelta = null;
 
 function create() {
   this.add.image(0, 0, "sky").setOrigin(0, 0);
@@ -32,7 +36,10 @@ function create() {
     .setOrigin(0);
 
   this.input.on("pointerdown", function () {
-    console.log("pressing mous button");
+    console.log("pressing mouse button!");
+  });
+  this.input.keyboard.on("keydown_SPACE", function () {
+    console.log("pressing space button!");
   });
 }
 
