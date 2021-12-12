@@ -17,20 +17,16 @@ const config = {
 };
 
 const VELOCITY = 200;
-
+const PIPES_TO_RENDER = 500;
 let flapVelocity = 250;
+
 let bird = null;
+const initialBirdPosition = { x: config.width * 0.1, y: config.height / 2 };
 
 let upperPipe = null;
 let lowerPipe = null;
+let pipeHorizontalDistance = 0;
 const pipeVerticalDistanceRange = [100, 200];
-let pipeVerticalDistance = Phaser.Math.Between(...pipeVerticalDistanceRange);
-
-const initialPipePosition3 = { x: 400, y: config.height * 0.3 };
-const initialPipePosition4 = { x: 400, y: -config.height * 0.6 };
-let pipe = null;
-
-const initialBirdPosition = { x: config.width * 0.1, y: config.height / 2 };
 
 function preload() {
   this.load.image("sky", "assets/sky.png");
@@ -39,28 +35,35 @@ function preload() {
 }
 
 function create() {
-  this.add.image(0, 0, "sky").setOrigin(0, 0);
+  this.add.image(0, 0, "sky").setOrigin(0);
 
   bird = this.physics.add
     .sprite(initialBirdPosition.x, initialBirdPosition.y, "bird")
     .setOrigin(0);
   bird.body.gravity.y = 400;
 
+  for (let i = 0; i < PIPES_TO_RENDER; i++) {
+    pipeHorizontalDistance += 300;
+    let pipeVerticalDistance = Phaser.Math.Between(
+      ...pipeVerticalDistanceRange
+    );
+    let pipeVerticalPosition = Phaser.Math.Between(
+      0 + 20,
+      config.height - 20 - pipeVerticalDistance
+    );
+    upperPipe = this.physics.add
+      .sprite(pipeHorizontalDistance, pipeVerticalPosition, "pipe")
+      .setOrigin(0, 1);
+
+    lowerPipe = this.physics.add
+      .sprite(upperPipe.x, upperPipe.y + pipeVerticalDistance, "pipe")
+      .setOrigin(0, 0);
+    upperPipe.body.velocity.x = -200;
+    lowerPipe.body.velocity.x = -200;
+  }
+
   this.input.on("pointerdown", flap);
   this.input.keyboard.on("keydown_SPACE", flap);
-
-  upperPipe = this.physics.add.sprite(200, 100, "pipe").setOrigin(0, 1);
-
-  lowerPipe = this.physics.add
-    .sprite(200, upperPipe.y + pipeVerticalDistance, "pipe")
-    .setOrigin(0, 0);
-
-  pipe = this.physics.add
-    .sprite(initialPipePosition3.x, initialPipePosition3.y, "pipe")
-    .setOrigin(0);
-  pipe = this.physics.add
-    .sprite(initialPipePosition4.x, initialPipePosition4.y, "pipe")
-    .setOrigin(0);
 }
 
 //if bird position y is smaller than 0 or greater that height of the canvas then alert "you have lost"
