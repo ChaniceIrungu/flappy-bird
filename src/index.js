@@ -23,11 +23,8 @@ let bird = null;
 
 let upperPipe = null;
 let lowerPipe = null;
-const pipeVerticalDistanceRange = [150, 250];
-let pipeVerticalDistance = Phaser.Math.Between(
-  pipeVerticalDistanceRange[0],
-  pipeVerticalDistanceRange[1]
-);
+const pipeVerticalDistanceRange = [100, 200];
+let pipeVerticalDistance = Phaser.Math.Between(...pipeVerticalDistanceRange);
 
 const initialPipePosition3 = { x: 400, y: config.height * 0.3 };
 const initialPipePosition4 = { x: 400, y: -config.height * 0.6 };
